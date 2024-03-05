@@ -1,20 +1,20 @@
-# shine
+# flash
 
-[![Package Version](https://img.shields.io/hexpm/v/shine)](https://hex.pm/packages/shine)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/shine/)
-[![License](https://img.shields.io/badge/License-BSD_2--Clause_+_Patent-blue.svg)](https://github.com/larzconwell/shine/blob/main/LICENSE)
-[![Test](https://github.com/larzconwell/shine/actions/workflows/test.yml/badge.svg)](https://github.com/larzconwell/shine/actions)
+[![Package Version](https://img.shields.io/hexpm/v/flash)](https://hex.pm/packages/flash)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/flash/)
+[![License](https://img.shields.io/badge/License-BSD_2--Clause_+_Patent-blue.svg)](https://github.com/larzconwell/flash/blob/main/LICENSE)
+[![Test](https://github.com/larzconwell/flash/actions/workflows/test.yml/badge.svg)](https://github.com/larzconwell/flash/actions)
 
-`shine` is a Gleam package enabling structured logging in both Erlang and JavaScript environments.
+`flash` is a Gleam package enabling structured logging in both Erlang and JavaScript environments.
 
 ## Usage
 
 ```
-gleam add shine
+gleam add flash
 ```
 
 ```gleam
-import shine
+import flash
 
 pub fn main() {
 }

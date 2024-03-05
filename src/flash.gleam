@@ -1,5 +1,5 @@
 import gleam/io
 
 pub fn main() {
-  io.println("Hello from shine!")
+  io.println("Hello from flash!")
 }
