@@ -1,0 +1,13 @@
+name = "shine"
+version = "0.0.1"
+description = "Gleam package enabling structured logging in both Erlang and JavaScript environments"
+licenses = ["BSD-2-Clause-Patent"]
+repository = { type = "github", user = "larzconwell", repo = "shine" }
+
+gleam = ">= 1.0.0"
+
+[dependencies]
+gleam_stdlib = "~> 0.36"
+
+[dev-dependencies]
+gleeunit = "~> 1.0"

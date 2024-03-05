@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+set -u
+
+errors=$(gleam format --check src test)
+if [[ "${errors}" != "" ]]; then
+    echo "${errors}"
+
+    exit 1
+fi
+
+exit 0
