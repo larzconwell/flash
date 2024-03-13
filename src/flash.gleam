@@ -272,9 +272,12 @@ fn attr_to_text(attr) {
 fn unique_by(list, predicate) {
   case list {
     [] -> []
-    [x, ..rest] -> [
-      x,
-      ..unique_by(list.filter(rest, fn(y) { predicate(x, y) }), predicate)
+    [first, ..rest] -> [
+      first,
+      ..unique_by(
+        list.filter(rest, fn(next) { predicate(first, next) }),
+        predicate,
+      )
     ]
   }
 }
