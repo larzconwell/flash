@@ -214,6 +214,12 @@ fn attr_compare(a: Attr, b: Attr) {
 
 fn prepare_attrs(attrs: List(Attr)) {
   attrs
+  |> list.filter(fn(attr) {
+    case attr {
+      GroupAttr(_, value) -> value != []
+      _ -> True
+    }
+  })
   |> list.reverse
   |> unique_by(fn(a, b) { a.key != b.key })
   |> list.sort(attr_compare)
