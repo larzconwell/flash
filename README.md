@@ -13,11 +13,46 @@
 gleam add flash
 ```
 
+With the default text writer output:
 ```gleam
-import flash
+import flash.{InfoLevel, GroupAttr, StringAttr}
 
 pub fn main() {
+  flash.new(InfoLevel, flash.text_writer)
+  |> flash.with_attr(
+    GroupAttr("request", [
+      StringAttr("method", "POST"),
+      StringAttr("path", "/user/create"),
+      StringAttr("id", "foobar"),
+    ]),
+  )
+  |> flash.info("request")
 }
+```
+
+```
+21:24:12 INFO  request                                       request.id=foobar request.method=POST request.path=/user/create
+```
+
+With the default json writer output:
+```gleam
+import flash.{InfoLevel, GroupAttr, StringAttr}
+
+pub fn main() {
+  flash.new(InfoLevel, flash.json_writer)
+  |> flash.with_attr(
+    GroupAttr("request", [
+      StringAttr("method", "POST"),
+      StringAttr("path", "/user/create"),
+      StringAttr("id", "foobar"),
+    ]),
+  )
+  |> flash.info("request")
+}
+```
+
+```
+{"level":"info","time":"2024-03-12T21:25:03.022-04:00","message":"request","request":{"id":"foobar","method":"POST","path":"/user/create"}}
 ```
 
 ## Developing
