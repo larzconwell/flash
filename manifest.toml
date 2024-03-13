@@ -12,6 +12,6 @@ packages = [
 
 [requirements]
 birl = { version = "~> 1.5" }
-gleam_json = { version = "~> 1.0"}
+gleam_json = { version = "~> 1.0" }
 gleam_stdlib = { version = "~> 0.36" }
 gleeunit = { version = "~> 1.0" }
