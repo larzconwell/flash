@@ -54,7 +54,7 @@ pub fn level_to_string(level: Level) -> String {
   }
 }
 
-pub opaque type Logger {
+pub type Logger {
   Logger(level: Level, writer: Writer, attrs: List(Attr))
 }
 
@@ -74,10 +74,15 @@ pub fn with_attrs(logger: Logger, attrs: List(Attr)) -> Logger {
   Logger(..logger, attrs: list.append(logger.attrs, attrs))
 }
 
+/// Determines if the logger is enabled for the given log level.
+pub fn enabled(logger: Logger, level: Level) -> Bool {
+  level_to_int(level) >= level_to_int(logger.level)
+}
+
 /// Logs the message and any attributes if the logger is enabled to
 /// log at the given log level.
 pub fn log(logger: Logger, level: Level, message: String) -> Nil {
-  case level_to_int(level) >= level_to_int(logger.level) {
+  case enabled(logger, level) {
     True -> logger.writer(level, message, logger.attrs)
     False -> Nil
   }
