@@ -19,13 +19,12 @@ import flash.{InfoLevel, GroupAttr, StringAttr}
 
 pub fn main() {
   flash.new(InfoLevel, flash.text_writer)
-  |> flash.with_attr(
-    GroupAttr("request", [
-      StringAttr("method", "POST"),
-      StringAttr("path", "/user/create"),
-      StringAttr("id", "foobar"),
-    ]),
-  )
+  |> flash.with_group("request")
+  |> flash.with_attrs([
+    StringAttr("method", "POST"),
+    StringAttr("path", "/user/create"),
+    StringAttr("id", "foobar"),
+  ])
   |> flash.info("request")
 }
 ```
@@ -40,13 +39,12 @@ import flash.{InfoLevel, GroupAttr, StringAttr}
 
 pub fn main() {
   flash.new(InfoLevel, flash.json_writer)
-  |> flash.with_attr(
-    GroupAttr("request", [
-      StringAttr("method", "POST"),
-      StringAttr("path", "/user/create"),
-      StringAttr("id", "foobar"),
-    ]),
-  )
+  |> flash.with_group("request")
+  |> flash.with_attrs([
+    StringAttr("method", "POST"),
+    StringAttr("path", "/user/create"),
+    StringAttr("id", "foobar"),
+  ])
   |> flash.info("request")
 }
 ```
