@@ -1,3 +1,4 @@
+import gleam/option.{None, Some}
 import gleeunit
 import gleeunit/should
 import flash
@@ -12,6 +13,12 @@ pub fn default_test() {
 
   flash.default.writer
   |> should.equal(flash.text_writer)
+
+  flash.default.parent
+  |> should.equal(None)
+
+  flash.default.group
+  |> should.equal("")
 
   flash.default.attrs
   |> should.equal([])
@@ -68,7 +75,9 @@ pub fn level_to_string_test() {
 
 pub fn new_test() {
   flash.new(flash.WarnLevel, flash.text_writer)
-  |> should.equal(flash.Logger(flash.WarnLevel, flash.text_writer, []))
+  |> should.equal(
+    flash.Logger(flash.WarnLevel, flash.text_writer, None, "", []),
+  )
 }
 
 pub fn with_attr_test() {
@@ -97,6 +106,18 @@ pub fn with_attrs_test() {
     flash.StringAttr("string", "value"),
     flash.BoolAttr("bool", True),
   ])
+}
+
+pub fn with_group_test() {
+  flash.with_group(flash.default, "group")
+  |> should.equal(
+    flash.Logger(
+      ..flash.default,
+      parent: Some(flash.default),
+      group: "group",
+      attrs: [],
+    ),
+  )
 }
 
 pub fn enabled_test() {

@@ -1,3 +1,4 @@
+import gleam/option.{type Option, None, Some}
 import gleam/io
 import gleam/bool
 import gleam/float
@@ -10,7 +11,7 @@ import gleam/json
 import birl
 
 /// Default logger that omits debug level logs and outputs a text format.
-pub const default = Logger(InfoLevel, text_writer, [])
+pub const default = Logger(InfoLevel, text_writer, None, "", [])
 
 /// Function type for custom writer implementations.
 pub type Writer =
@@ -55,13 +56,19 @@ pub fn level_to_string(level: Level) -> String {
 }
 
 pub type Logger {
-  Logger(level: Level, writer: Writer, attrs: List(Attr))
+  Logger(
+    level: Level,
+    writer: Writer,
+    parent: Option(Logger),
+    group: String,
+    attrs: List(Attr),
+  )
 }
 
 /// Creates a logger that logs for levels greater than or equal to
 /// the given level and writes using the given writer.
 pub fn new(level: Level, writer: Writer) -> Logger {
-  Logger(level, writer, [])
+  Logger(level, writer, None, "", [])
 }
 
 /// Adds the given attribute to the logger.
@@ -74,6 +81,11 @@ pub fn with_attrs(logger: Logger, attrs: List(Attr)) -> Logger {
   Logger(..logger, attrs: list.append(logger.attrs, attrs))
 }
 
+/// Creates a child group from the given logger with the given group name.
+pub fn with_group(logger: Logger, group: String) -> Logger {
+  Logger(..logger, parent: Some(logger), group: group, attrs: [])
+}
+
 /// Determines if the logger is enabled for the given log level.
 pub fn enabled(logger: Logger, level: Level) -> Bool {
   level_to_int(level) >= level_to_int(logger.level)
@@ -83,7 +95,7 @@ pub fn enabled(logger: Logger, level: Level) -> Bool {
 /// log at the given log level.
 pub fn log(logger: Logger, level: Level, message: String) -> Nil {
   case enabled(logger, level) {
-    True -> logger.writer(level, message, logger.attrs)
+    True -> logger.writer(level, message, logger_to_attrs(logger))
     False -> Nil
   }
 }
@@ -234,6 +246,19 @@ fn prepare_attrs(attrs: List(Attr)) {
       _ -> attr
     }
   })
+}
+
+fn logger_to_attrs(logger: Logger) {
+  case logger.parent {
+    Some(parent) ->
+      logger_to_attrs(
+        Logger(parent.level, parent.writer, parent.parent, parent.group, [
+          GroupAttr(logger.group, logger.attrs),
+          ..parent.attrs
+        ]),
+      )
+    None -> logger.attrs
+  }
 }
 
 fn attr_to_json_value(attr) {
