@@ -1,5 +1,5 @@
 name = "flash"
-version = "1.0.0"
+version = "1.0.1"
 description = "Gleam package enabling structured logging in both Erlang and JavaScript environments"
 licenses = ["BSD-2-Clause-Patent"]
 repository = { type = "github", user = "larzconwell", repo = "flash" }
