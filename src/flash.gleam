@@ -1,14 +1,14 @@
-import gleam/option.{type Option, None, Some}
-import gleam/io
+import birl
 import gleam/bool
 import gleam/float
 import gleam/int
-import gleam/string
-import gleam/string_builder
-import gleam/list
-import gleam/order
+import gleam/io
 import gleam/json
-import birl
+import gleam/list
+import gleam/option.{type Option, None, Some}
+import gleam/order
+import gleam/string
+import gleam/string_tree
 
 /// Default logger that omits debug level logs and outputs a text format.
 pub const default = Logger(InfoLevel, text_writer, None, "", [])
@@ -169,19 +169,19 @@ pub fn json_writer(level: Level, message: String, attrs: List(Attr)) -> Nil {
 /// last attribute with the key is chosen.
 pub fn text_writer(level: Level, message: String, attrs: List(Attr)) -> Nil {
   let now = birl.get_time_of_day(birl.now())
-  let message = string.pad_right(message, 45, " ")
+  let message = string.pad_end(message, 45, " ")
   let level =
     level_to_string(level)
     |> string.uppercase
-    |> string.pad_right(to: 5, with: " ")
+    |> string.pad_end(to: 5, with: " ")
 
   let time_builder =
-    string_builder.from_strings([
-      string.pad_left(int.to_string(now.hour), 2, "0"),
+    string_tree.from_strings([
+      string.pad_start(int.to_string(now.hour), 2, "0"),
       ":",
-      string.pad_left(int.to_string(now.minute), 2, "0"),
+      string.pad_start(int.to_string(now.minute), 2, "0"),
       ":",
-      string.pad_left(int.to_string(now.second), 2, "0"),
+      string.pad_start(int.to_string(now.second), 2, "0"),
     ])
 
   let attrs =
@@ -189,16 +189,16 @@ pub fn text_writer(level: Level, message: String, attrs: List(Attr)) -> Nil {
     |> prepare_attrs
     |> list.map(attr_to_text)
 
-  string_builder.join(
+  string_tree.join(
     [
       time_builder,
-      string_builder.from_string(level),
-      string_builder.from_string(message),
+      string_tree.from_string(level),
+      string_tree.from_string(message),
       ..attrs
     ],
     " ",
   )
-  |> string_builder.to_string
+  |> string_tree.to_string
   |> io.println
 }
 
@@ -275,7 +275,7 @@ fn attr_to_json_value(attr) {
 }
 
 fn attr_to_text(attr) {
-  let from_strings = string_builder.from_strings
+  let from_strings = string_tree.from_strings
 
   case attr {
     BoolAttr(key, value) -> from_strings([key, "=", bool.to_string(value)])
@@ -293,7 +293,7 @@ fn attr_to_text(attr) {
           StringAttr(_, value) -> StringAttr(key, value)
         })
       })
-      |> string_builder.join(with: " ")
+      |> string_tree.join(with: " ")
     IntAttr(key, value) -> from_strings([key, "=", int.to_string(value)])
     StringAttr(key, value) -> from_strings([key, "=", value])
   }
