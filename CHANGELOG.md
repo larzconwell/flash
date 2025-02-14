@@ -1,7 +1,10 @@
 # Unreleased
 
+## Changed
+
 - Change minimum Gleam version to 1.8.0
 - Updated version of `gleam_stdlib`
+- Replaced `birl` with `gleam_time`
 
 # v1.0.1 - 2024-09-03
 

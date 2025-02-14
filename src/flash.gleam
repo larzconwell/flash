@@ -1,4 +1,3 @@
-import birl
 import gleam/bool
 import gleam/float
 import gleam/int
@@ -9,6 +8,8 @@ import gleam/option.{type Option, None, Some}
 import gleam/order
 import gleam/string
 import gleam/string_tree
+import gleam/time/calendar
+import gleam/time/timestamp
 
 /// Default logger that omits debug level logs and outputs a text format.
 pub const default = Logger(InfoLevel, text_writer, None, "", [])
@@ -144,7 +145,13 @@ pub fn json_writer(level: Level, message: String, attrs: List(Attr)) -> Nil {
 
   json.object([
     #("level", json.string(level_to_string(level))),
-    #("time", json.string(birl.to_iso8601(birl.now()))),
+    #(
+      "time",
+      json.string(timestamp.to_rfc3339(
+        timestamp.system_time(),
+        calendar.local_offset(),
+      )),
+    ),
     #("message", json.string(message)),
     ..attrs
   ])
@@ -168,20 +175,21 @@ pub fn json_writer(level: Level, message: String, attrs: List(Attr)) -> Nil {
 /// group attributes. If multiple attributes in the same group share a key, the
 /// last attribute with the key is chosen.
 pub fn text_writer(level: Level, message: String, attrs: List(Attr)) -> Nil {
-  let now = birl.get_time_of_day(birl.now())
   let message = string.pad_end(message, 45, " ")
   let level =
     level_to_string(level)
     |> string.uppercase
     |> string.pad_end(to: 5, with: " ")
 
+  let #(_, now) =
+    timestamp.to_calendar(timestamp.system_time(), calendar.local_offset())
   let time_tree =
     string_tree.from_strings([
-      string.pad_start(int.to_string(now.hour), 2, "0"),
+      string.pad_start(int.to_string(now.hours), 2, "0"),
       ":",
-      string.pad_start(int.to_string(now.minute), 2, "0"),
+      string.pad_start(int.to_string(now.minutes), 2, "0"),
       ":",
-      string.pad_start(int.to_string(now.second), 2, "0"),
+      string.pad_start(int.to_string(now.seconds), 2, "0"),
     ])
 
   let attrs =
