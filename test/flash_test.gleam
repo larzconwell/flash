@@ -1,7 +1,7 @@
+import flash
 import gleam/option.{None, Some}
 import gleeunit
 import gleeunit/should
-import flash
 
 pub fn main() {
   gleeunit.main()
