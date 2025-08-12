@@ -4,6 +4,7 @@
 
 - Change minimum Gleam version to 1.12.0
 - Updated minimum version of `gleam_stdlib` to 0.62.0
+- Updated minimum version of `gleam_json` to 3.0.0
 
 # v2.0.0 - 2025-02-14
 
